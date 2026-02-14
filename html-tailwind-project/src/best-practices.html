@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Practices & Patterns - Chapter 07</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Highlight.js for Code Syntax -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- Tailwind CSS -->
+    <link href="./output.css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen">
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="glass-effect sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-code text-2xl text-white"></i>
+                <span class="font-bold text-xl tracking-tight text-white">Chapter 07</span>
+            </div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="index.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="code-samples.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-file-code"></i> Code Samples
+                </a>
+                <a href="advanced-diagrams.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-diagram-project"></i> Advanced Diagrams
+                </a>
+                <a href="best-practices.html"
+                    class="text-white border-b-2 border-white pb-1 hover:text-yellow-300 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-star"></i> Best Practices
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="py-16 text-center relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4">
+            <div class="inline-block mb-4" data-aos="zoom-in" data-aos-delay="100">
+                <i class="fas fa-book-open text-6xl text-yellow-300"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl" data-aos="fade-up"
+                data-aos-delay="200">
+                Best Practices & Patterns
+            </h1>
+            <p class="text-xl text-white/90 font-light backdrop-blur-sm bg-white/10 py-3 px-6 rounded-full inline-block"
+                data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-graduation-cap mr-2"></i>Production-Ready ASP.NET Core Development
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 max-w-6xl relative z-10 space-y-20">
+
+        <!-- Error Handling Section -->
+        <section data-aos="fade-up">
+            <div class="glass-effect p-10 rounded-3xl border-2 border-white/30">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold text-white">Global Error Handling</h2>
+                        <p class="text-white/70">Gracefully handle exceptions across your application</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl">
+                    <div
+                        class="bg-slate-800 px-4 py-3 text-xs text-slate-300 flex items-center gap-2 border-b border-slate-700">
+                        <i class="fas fa-file-code"></i> Program.cs (Middleware Configuration)
+                    </div>
+                    <pre class="m-0 p-6 overflow-x-auto"><code class="language-csharp">
+// Global Exception Handler Middleware
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var error = context.Features.Get<IExceptionHandlerFeature>();
+        if (error != null)
+        {
+            var ex = error.Error;
+            
+            // Log the exception
+            var logger = context.RequestServices
+                .GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "Unhandled exception occurred");
+
+            // Return user-friendly error response
+            await context.Response.WriteAsync(new ErrorDetails()
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error. Please try again later."
+            }.ToString());
+        }
+    });
+});
+
+// Custom Error Details Model
+public class ErrorDetails
+{
+    public int StatusCode { get; set; }
+    public string Message { get; set; }
+
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this);
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dependency Injection Examples -->
+        <section data-aos="fade-up">
+            <div class="glass-effect p-10 rounded-3xl border-2 border-white/30">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-syringe text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold text-white">Dependency Injection Lifetimes</h2>
+                        <p class="text-white/70">Understanding Singleton, Scoped, and Transient</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white/10 p-6 rounded-xl border border-white/20">
+                        <div class="text-4xl mb-3">⚡</div>
+                        <h3 class="text-xl font-bold text-yellow-300 mb-2">Transient</h3>
+                        <p class="text-white/80 text-sm mb-3">Created every time they're requested</p>
+                        <div class="bg-slate-900/50 p-2 rounded text-xs">
+                            <code class="text-yellow-300">AddTransient</code>
+                        </div>
+                        <p class="text-white/70 text-xs mt-3">Use for lightweight, stateless services</p>
+                    </div>
+
+                    <div class="bg-white/10 p-6 rounded-xl border border-white/20">
+                        <div class="text-4xl mb-3">🔄</div>
+                        <h3 class="text-xl font-bold text-cyan-300 mb-2">Scoped</h3>
+                        <p class="text-white/80 text-sm mb-3">Created once per HTTP request</p>
+                        <div class="bg-slate-900/50 p-2 rounded text-xs">
+                            <code class="text-cyan-300">AddScoped</code>
+                        </div>
+                        <p class="text-white/70 text-xs mt-3">Best for DbContext, repositories</p>
+                    </div>
+
+                    <div class="bg-white/10 p-6 rounded-xl border border-white/20">
+                        <div class="text-4xl mb-3">🔒</div>
+                        <h3 class="text-xl font-bold text-purple-300 mb-2">Singleton</h3>
+                        <p class="text-white/80 text-sm mb-3">Created once for app lifetime</p>
+                        <div class="bg-slate-900/50 p-2 rounded text-xs">
+                            <code class="text-purple-300">AddSingleton</code>
+                        </div>
+                        <p class="text-white/70 text-xs mt-3">Use for caches, configuration</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl">
+                    <div
+                        class="bg-slate-800 px-4 py-3 text-xs text-slate-300 flex items-center gap-2 border-b border-slate-700">
+                        <i class="fas fa-file-code"></i> Program.cs
+                    </div>
+                    <pre class="m-0 p-6 overflow-x-auto"><code class="language-csharp">
+// Register services with appropriate lifetimes
+var builder = WebApplication.CreateBuilder(args);
+
+// Transient: New instance per request to the service
+builder.Services.AddTransient<IEmailService, EmailService>();
+
+// Scoped: New instance per HTTP request (shared within request)
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+// Singleton: Single instance for entire app lifetime
+builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+// DbContext as Scoped (very important!)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repository Pattern Implementation -->
+        <section data-aos="fade-up">
+            <div class="glass-effect p-10 rounded-3xl border-2 border-white/30">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-box text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold text-white">Repository Pattern</h2>
+                        <p class="text-white/70">Abstract data access logic from business logic</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Interface -->
+                    <div>
+                        <h3 class="text-xl font-bold text-purple-300 mb-3 flex items-center gap-2">
+                            <i class="fas fa-layer-group"></i> 1. Define Generic Repository Interface
+                        </h3>
+                        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-xl">
+                            <div class="bg-slate-800 px-4 py-2 text-xs text-slate-300">IRepository.cs</div>
+                            <pre class="m-0 p-4 overflow-x-auto"><code class="language-csharp">
+public interface IRepository<T> where T : class
+{
+    Task<IEnumerable<T>> GetAllAsync();
+    Task<T?> GetByIdAsync(int id);
+    Task<T> AddAsync(T entity);
+    Task UpdateAsync(T entity);
+    Task DeleteAsync(int id);
+    Task<bool> ExistsAsync(int id);
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Implementation -->
+                    <div>
+                        <h3 class="text-xl font-bold text-cyan-300 mb-3 flex items-center gap-2">
+                            <i class="fas fa-code"></i> 2. Implement with Entity Framework
+                        </h3>
+                        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-xl">
+                            <div class="bg-slate-800 px-4 py-2 text-xs text-slate-300">Repository.cs</div>
+                            <pre class="m-0 p-4 overflow-x-auto"><code class="language-csharp">
+public class Repository<T> : IRepository<T> where T : class
+{
+    private readonly AppDbContext _context;
+    private readonly DbSet<T> _dbSet;
+
+    public Repository(AppDbContext context)
+    {
+        _context = context;
+        _dbSet = context.Set<T>();
+    }
+
+    public async Task<IEnumerable<T>> GetAllAsync()
+    {
+        return await _dbSet.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<T?> GetByIdAsync(int id)
+    {
+        return await _dbSet.FindAsync(id);
+    }
+
+    public async Task<T> AddAsync(T entity)
+    {
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return entity;
+    }
+
+    public async Task UpdateAsync(T entity)
+    {
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var entity = await GetByIdAsync(id);
+        if (entity != null)
+        {
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        return await _dbSet.FindAsync(id) != null;
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Usage -->
+                    <div>
+                        <h3 class="text-xl font-bold text-emerald-300 mb-3 flex items-center gap-2">
+                            <i class="fas fa-play-circle"></i> 3. Use in Service Layer
+                        </h3>
+                        <div class="bg-slate-900 rounded-xl overflow-hidden shadow-xl">
+                            <div class="bg-slate-800 px-4 py-2 text-xs text-slate-300">ProductService.cs</div>
+                            <pre class="m-0 p-4 overflow-x-auto"><code class="language-csharp">
+public class ProductService : IProductService
+{
+    private readonly IRepository<Product> _productRepo;
+
+    public ProductService(IRepository<Product> productRepo)
+    {
+        _productRepo = productRepo;
+    }
+
+    public async Task<IEnumerable<Product>> GetAllProductsAsync()
+    {
+        return await _productRepo.GetAllAsync();
+    }
+
+    public async Task<Product> CreateProductAsync(ProductDto dto)
+    {
+        var product = new Product
+        {
+            Name = dto.Name,
+            Price = dto.Price,
+            // ... map other properties
+        };
+
+        return await _productRepo.AddAsync(product);
+    }
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Section -->
+        <section data-aos="fade-up">
+            <div class="glass-effect p-10 rounded-3xl border-2 border-white/30">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-vial text-white text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-bold text-white">Unit Testing Best Practices</h2>
+                        <p class="text-white/70">Test your business logic with xUnit and Moq</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl">
+                    <div
+                        class="bg-slate-800 px-4 py-3 text-xs text-slate-300 flex justify-between items-center border-b border-slate-700">
+                        <span class="flex items-center gap-2"><i class="fas fa-file-code"></i>
+                            ProductServiceTests.cs</span>
+                        <span class="bg-emerald-400 text-slate-900 px-2 py-1 rounded text-[10px] font-bold">xUnit +
+                            Moq</span>
+                    </div>
+                    <pre class="m-0 p-6 overflow-x-auto"><code class="language-csharp">
+public class ProductServiceTests
+{
+    private readonly Mock<IRepository<Product>> _mockRepo;
+    private readonly ProductService _service;
+
+    public ProductServiceTests()
+    {
+        _mockRepo = new Mock<IRepository<Product>>();
+        _service = new ProductService(_mockRepo.Object);
+    }
+
+    [Fact]
+    public async Task GetAllProducts_ReturnsAllProducts()
+    {
+        // Arrange
+        var products = new List<Product>
+        {
+            new Product { Id = 1, Name = "Product 1", Price = 10 },
+            new Product { Id = 2, Name = "Product 2", Price = 20 }
+        };
+        _mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(products);
+
+        // Act
+        var result = await _service.GetAllProductsAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count());
+        _mockRepo.Verify(r => r.GetAllAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateProduct_ValidDto_ReturnsProduct()
+    {
+        // Arrange
+        var dto = new ProductDto { Name = "New Product", Price = 15 };
+        var product = new Product { Id = 3, Name = dto.Name, Price = dto.Price };
+        
+        _mockRepo.Setup(r => r.AddAsync(It.IsAny<Product>()))
+                 .ReturnsAsync(product);
+
+        // Act
+        var result = await _service.CreateProductAsync(dto);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(dto.Name, result.Name);
+        Assert.Equal(dto.Price, result.Price);
+    }
+}
+                    </code></pre>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white/10 p-4 rounded-lg border border-emerald-400/30">
+                        <div class="text-emerald-300 font-bold mb-2">✓ Arrange</div>
+                        <p class="text-white/70 text-sm">Set up test data and mocks</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-lg border border-cyan-400/30">
+                        <div class="text-cyan-300 font-bold mb-2">✓ Act</div>
+                        <p class="text-white/70 text-sm">Execute the method being tested</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-lg border border-purple-400/30">
+                        <div class="text-purple-300 font-bold mb-2">✓ Assert</div>
+                        <p class="text-white/70 text-sm">Verify expected behavior</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-effect text-white text-sm py-12 mt-16 relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-4 mb-4">
+                <i class="fab fa-github text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+                <i class="fab fa-linkedin text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+                <i class="fas fa-envelope text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+            </div>
+            <p class="font-semibold text-lg mb-2">Chapter 07 - JavaScript Clients and ASP.NET Web API</p>
+            <p class="text-white/70">Group 7 Presentation | 2026</p>
+        </div>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.3, width: 1 },
+                move: { enable: true, speed: 1.5 }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+                modes: { repulse: { distance: 100 }, push: { particles_nb: 3 } }
+            }
+        });
+    </script>
+
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+
+</body>
+
+</html>

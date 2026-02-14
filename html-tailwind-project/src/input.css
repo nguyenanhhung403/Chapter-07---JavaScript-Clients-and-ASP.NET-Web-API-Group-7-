@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Animations from HTML files */
+
+@layer utilities {
+
+  /* Flow Pulse Animation (from index.html) */
+  .animate-flow-pulse {
+    animation: flowPulse 2s infinite;
+  }
+
+  @keyframes flowPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  /* Dashed Line Animation (from advanced-diagrams.html) */
+  .animate-dash-line {
+      stroke-dasharray: 10;
+      animation: dash 3s linear infinite;
+  }
+
+  @keyframes dash {
+      to {
+          stroke-dashoffset: -40;
+      }
+  }
+}

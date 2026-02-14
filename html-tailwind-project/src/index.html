@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASP.NET Core Architecture - Chapter 07</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <link href="./output.css" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen">
+
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Navbar with Glassmorphism -->
+  <nav class="glass-effect sticky top-0 z-50 shadow-2xl">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-code text-2xl text-white"></i>
+        <span class="font-bold text-xl tracking-tight text-white">Chapter 07</span>
+      </div>
+      <div class="flex gap-6 text-sm font-medium">
+        <a href="index.html"
+          class="text-white border-b-2 border-white pb-1 hover:text-yellow-300 transition-all duration-300 flex items-center gap-2">
+          <i class="fas fa-home"></i> Overview
+        </a>
+        <a href="code-samples.html"
+          class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+          <i class="fas fa-file-code"></i> Code Samples
+        </a>
+        <a href="advanced-diagrams.html"
+          class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+          <i class="fas fa-diagram-project"></i> Advanced Diagrams
+        </a>
+        <a href="best-practices.html"
+          class="text-white/80 hover:text-white hover:border-b-2 hover:border-amber-300 pb-1 transition-all duration-300 flex items-center gap-2">
+          <i class="fas fa-star"></i> Best Practices
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="container mx-auto px-4 py-12 max-w-7xl relative z-10" data-aos="fade-up">
+    <header class="mb-16 text-center">
+      <div class="inline-block mb-4" data-aos="zoom-in" data-aos-delay="100">
+        <i class="fas fa-server text-6xl text-white/90"></i>
+      </div>
+      <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-2xl" data-aos="fade-up"
+        data-aos-delay="200">
+        ASP.NET Core Architecture
+      </h1>
+      <p class="text-xl md:text-2xl text-white/90 font-light max-w-3xl mx-auto backdrop-blur-sm bg-white/10 py-3 px-6 rounded-full"
+        data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-lightbulb mr-2"></i>Chapter 07: JavaScript Clients and ASP.NET Web API Request Flow
+      </p>
+    </header>
+
+    <!-- Dynamic Visual Diagram Section -->
+    <section class="bg-white rounded-2xl shadow-2xl overflow-hidden mb-16 border border-slate-100" data-aos="fade-up"
+      data-aos-delay="400">
+      <div class="bg-indigo-900 px-8 py-6 flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+          <svg class="w-6 h-6 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+          System Flow Diagram
+        </h2>
+        <span
+          class="bg-indigo-800 text-indigo-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">High
+          Level Design</span>
+      </div>
+
+      <!-- Diagram Container -->
+      <div class="p-8 md:p-12 overflow-x-auto">
+        <div class="min-w-[1000px] flex items-stretch justify-center gap-6 text-sm">
+
+          <!-- 1. The Edge (Client & Proxy) -->
+          <div class="flex flex-col gap-6 justify-center">
+            <!-- Client -->
+            <div
+              class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 w-48 text-center shadow-lg relative group transition-all hover:-translate-y-1">
+              <div
+                class="absolute -top-3 -right-3 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md z-10">
+                1</div>
+              <div
+                class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-3 text-blue-600">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="font-bold text-blue-900">Client</h3>
+              <p class="text-xs text-blue-700 mt-1">Browser / Mobile App</p>
+            </div>
+
+            <!-- Arrow Down -->
+            <div class="flex justify-center text-slate-400 animate-flow-pulse">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </div>
+
+            <!-- Reverse Proxy -->
+            <div
+              class="bg-cyan-50 border-2 border-cyan-200 rounded-xl p-4 w-48 text-center shadow-lg relative group transition-all hover:-translate-y-1">
+              <div
+                class="absolute -top-3 -right-3 bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md z-10">
+                2</div>
+              <div
+                class="w-12 h-12 mx-auto bg-cyan-100 rounded-full flex items-center justify-center mb-3 text-cyan-600">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="font-bold text-cyan-900">Reverse Proxy</h3>
+              <p class="text-xs text-cyan-700 mt-1">Nginx / IIS / Apache</p>
+            </div>
+          </div>
+
+          <!-- Connector Arrow Right -->
+          <div class="flex items-center text-slate-300 animate-flow-pulse">
+            <svg class="w-8 h-8 rotate-[-90deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </div>
+
+          <!-- 2. The Host (ASP.NET Core) -->
+          <div class="border-4 border-dashed border-slate-200 rounded-3xl p-6 bg-slate-50 flex-1 relative">
+            <div
+              class="absolute -top-4 left-6 bg-slate-200 text-slate-600 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-slate-300">
+              ASP.NET Core Host
+            </div>
+
+            <div class="flex items-start gap-6 h-full">
+              <!-- Kestrel -->
+              <div
+                class="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-4 w-40 text-center shadow-md self-center flex-shrink-0 relative">
+                <div
+                  class="absolute -top-3 -left-3 bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-md z-10">
+                  3</div>
+                <div
+                  class="w-10 h-10 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-2 text-indigo-600">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                  </svg>
+                </div>
+                <div class="font-bold text-indigo-900">Kestrel</div>
+                <div class="text-xs text-indigo-600">Cross-platform Web Server</div>
+              </div>
+
+              <!-- Arrow -->
+              <div class="self-center text-slate-400 animate-flow-pulse">
+                <svg class="w-6 h-6 rotate-[-90deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+
+              <!-- Middleware Pipeline -->
+              <div
+                class="bg-white border-2 border-indigo-100 rounded-xl p-4 shadow-sm flex flex-col gap-2 w-56 relative">
+                <div class="text-center mb-2 font-bold text-slate-700 border-b pb-2 text-xs uppercase tracking-wide">
+                  Middleware Pipeline</div>
+
+                <div class="bg-orange-50 border border-orange-200 rounded p-2 text-xs flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-orange-400"></div> Exception Handling
+                </div>
+                <div class="bg-orange-50 border border-orange-200 rounded p-2 text-xs flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-orange-400"></div> HSTS / HTTPS
+                </div>
+                <div class="bg-orange-50 border border-orange-200 rounded p-2 text-xs flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-orange-400"></div> Static Files
+                </div>
+                <div class="bg-orange-50 border border-orange-200 rounded p-2 text-xs flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-orange-400"></div> Routing
+                </div>
+                <div
+                  class="bg-orange-100 border border-orange-300 rounded p-2 text-xs font-bold text-orange-800 flex items-center gap-2 shadow-sm ring-2 ring-orange-200/50">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Authentication
+                  <span
+                    class="ml-auto bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">4</span>
+                </div>
+                <div class="bg-orange-50 border border-orange-200 rounded p-2 text-xs flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-orange-400"></div> Endpoint Routing
+                </div>
+              </div>
+
+              <!-- Arrow -->
+              <div class="self-center text-slate-400 animate-flow-pulse">
+                <svg class="w-6 h-6 rotate-[-90deg]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+
+              <!-- App Layer -->
+              <div class="flex flex-col gap-4 justify-center">
+                <div
+                  class="bg-purple-50 border-2 border-purple-200 rounded-xl p-3 w-44 shadow-lg text-center relative group">
+                  <div
+                    class="absolute -top-2 -right-2 bg-purple-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md">
+                    5</div>
+                  <div class="font-bold text-purple-900 text-sm">Controller</div>
+                  <div class="text-[10px] text-purple-600">Request Logic</div>
+                </div>
+                <div class="text-center text-slate-300"><svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg></div>
+                <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-3 w-44 shadow-lg text-center">
+                  <div class="font-bold text-purple-900 text-sm">Service Layer</div>
+                  <div class="text-[10px] text-purple-600">Business Logic</div>
+                </div>
+                <div class="text-center text-slate-300"><svg class="w-4 h-4 mx-auto" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg></div>
+                <div
+                  class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-3 w-44 shadow-lg text-center relative">
+                  <div
+                    class="absolute -bottom-2 -right-2 bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md">
+                    6</div>
+                  <div class="flex items-center justify-center gap-2 mb-1 text-emerald-600">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                  </div>
+                  <div class="font-bold text-emerald-900 text-sm">EF Core / DB</div>
+                  <div class="text-[10px] text-emerald-600">Data Access</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend / Steps -->
+      <div class="bg-slate-50 border-t border-slate-200 p-6 flex flex-wrap justify-center gap-6 text-sm">
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs">1</span>
+          <span class="text-slate-700">Client Request</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-cyan-600 text-white font-bold text-xs">2</span>
+          <span class="text-slate-700">Reverse Proxy Forward</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white font-bold text-xs">3</span>
+          <span class="text-slate-700">Kestrel Receives</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white font-bold text-xs">4</span>
+          <span class="text-slate-700">Middleware / Auth</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white font-bold text-xs">5</span>
+          <span class="text-slate-700">Controller Processing</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white font-bold text-xs">6</span>
+          <span class="text-slate-700">Database Query</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Description Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16" data-aos="fade-up">
+      <!-- Left Column -->
+      <div class="space-y-8">
+        <!-- Edge Layer -->
+        <div
+          class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden"
+          data-aos="fade-right" data-aos-delay="100">
+          <div class="h-2 bg-cyan-500 w-full group-hover:h-3 transition-all duration-300"></div>
+          <div class="p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="p-3 bg-cyan-50 rounded-xl text-cyan-600 transition-colors group-hover:bg-cyan-600 group-hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800">A. The Edge Layer</h3>
+            </div>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <span
+                  class="bg-cyan-100 text-cyan-800 text-xs font-bold px-2 py-1 rounded mt-0.5 flex-shrink-0">CLIENT</span>
+                <span class="text-slate-600 leading-relaxed"><strong>User:</strong> Browser or Mobile App sending HTTP
+                  Requests (GET/POST).</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="bg-cyan-100 text-cyan-800 text-xs font-bold px-2 py-1 rounded mt-0.5 flex-shrink-0">PROXY</span>
+                <span class="text-slate-600 leading-relaxed"><strong>Reverse Proxy (Nginx/IIS):</strong> The first line
+                  of defense. Handles SSL termination, load balancing, and forwarding requests to Kestrel.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Web Server -->
+        <div
+          class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden"
+          data-aos="fade-right" data-aos-delay="200">
+          <div class="h-2 bg-indigo-500 w-full group-hover:h-3 transition-all duration-300"></div>
+          <div class="p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="p-3 bg-indigo-50 rounded-xl text-indigo-600 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800">B. Web Server & Host</h3>
+            </div>
+            <p class="text-slate-600 leading-relaxed">
+              <strong>Kestrel Server:</strong> The cross-platform, high-performance web server implementation for
+              ASP.NET Core. It receives the request from the proxy, constructs the HttpContext, and pushes it into the
+              Middleware Pipeline.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="space-y-8">
+        <!-- Middleware -->
+        <div
+          class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden"
+          data-aos="fade-left" data-aos-delay="100">
+          <div class="h-2 bg-orange-500 w-full group-hover:h-3 transition-all duration-300"></div>
+          <div class="p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="p-3 bg-orange-50 rounded-xl text-orange-600 transition-colors group-hover:bg-orange-600 group-hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800">C. Middleware Pipeline</h3>
+            </div>
+
+            <p
+              class="text-sm text-orange-700 italic mb-5 bg-orange-50 p-2 rounded border border-orange-100 inline-block">
+              "The Heart of ASP.NET Core - Order is critical"
+            </p>
+
+            <ul class="space-y-4 text-slate-600">
+              <li class="flex items-start gap-3">
+                <div class="w-2 h-2 rounded-full bg-slate-300 mt-2"></div>
+                <span><strong class="text-slate-800">Exception Handling:</strong> Catches errors globally to ensure a
+                  graceful failure response.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-2 h-2 rounded-full bg-slate-300 mt-2"></div>
+                <span><strong class="text-slate-800">HSTS / HTTPS:</strong> Enforces security, ensuring all
+                  communication uses SSL/TLS.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-2 h-2 rounded-full bg-slate-300 mt-2"></div>
+                <span><strong class="text-slate-800">Routing:</strong> Determines which endpoint (Controller) matches
+                  the request URL.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-2 h-2 rounded-full bg-slate-300 mt-2"></div>
+                <span><strong class="text-slate-800">Authentication:</strong> Answers "Who are you?" identifying the
+                  user.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- App Logic -->
+        <div
+          class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 overflow-hidden"
+          data-aos="fade-left" data-aos-delay="200">
+          <div class="h-2 bg-purple-500 w-full group-hover:h-3 transition-all duration-300"></div>
+          <div class="p-8">
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="p-3 bg-purple-50 rounded-xl text-purple-600 transition-colors group-hover:bg-purple-600 group-hover:text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-800">D. Application Logic</h3>
+            </div>
+            <ul class="space-y-6">
+              <li class="border-l-4 border-purple-200 pl-4">
+                <div class="font-bold text-slate-800 text-lg">Controller</div>
+                <div class="text-slate-600 mt-1">Accepts the request, performs Model Validation, and delegates to
+                  services.</div>
+              </li>
+              <li class="border-l-4 border-purple-200 pl-4">
+                <div class="font-bold text-slate-800 text-lg">Business Services</div>
+                <div class="text-slate-600 mt-1">Encapsulates complex business rules, calculations, and external
+                  integrations (e.g., Email).</div>
+              </li>
+              <li class="border-l-4 border-emerald-200 pl-4">
+                <div class="font-bold text-slate-800 text-lg">Data Access (EF Core)</div>
+                <div class="text-slate-600 mt-1">Interacts with the SQL Server database to Create, Read, Update, or
+                  Delete data.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <footer class="glass-effect text-white text-sm py-12 mt-16 relative z-10" data-aos="fade-up">
+      <div class="container mx-auto px-4 text-center">
+        <div class="flex justify-center gap-4 mb-4">
+          <i class="fab fa-github text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+          <i class="fab fa-linkedin text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+          <i class="fas fa-envelope text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+        </div>
+        <p class="font-semibold text-lg mb-2">Chapter 07 - JavaScript Clients and ASP.NET Web API</p>
+        <p class="text-white/70">Group 7 Presentation | 2026</p>
+      </div>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: false },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1
+          },
+          move: { enable: true, speed: 2, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+          modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+        },
+        retina_detect: true
+      });
+    </script>
+
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+      });
+    </script>
+
+</body>
+
+</html>

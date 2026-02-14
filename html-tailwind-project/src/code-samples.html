@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Examples - Chapter 07</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Highlight.js for Code Syntax -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+    <!-- Tailwind CSS -->
+    <link href="./output.css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen">
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="glass-effect sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-code text-2xl text-white"></i>
+                <span class="font-bold text-xl tracking-tight text-white">Chapter 07</span>
+            </div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="index.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="code-samples.html"
+                    class="text-white border-b-2 border-white pb-1 hover:text-yellow-300 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-file-code"></i> Code Samples
+                </a>
+                <a href="advanced-diagrams.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-diagram-project"></i> Advanced Diagrams
+                </a>
+                <a href="best-practices.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-yellow-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-star"></i> Best Practices
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="py-16 text-center relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4">
+            <div class="inline-block mb-4" data-aos="zoom-in" data-aos-delay="100">
+                <i class="fas fa-code text-6xl text-yellow-300"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl" data-aos="fade-up"
+                data-aos-delay="200">
+                JavaScript Clients & ASP.NET Web API
+            </h1>
+            <p class="text-xl text-white/90 font-light backdrop-blur-sm bg-white/10 py-3 px-6 rounded-full inline-block"
+                data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-rocket mr-2"></i>Group 7 - Code Implementation Patterns
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 max-w-6xl relative z-10">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12" data-aos="fade-up">
+
+            <!-- JavaScript Client Side -->
+            <div class="space-y-6" data-aos="fade-right" data-aos-delay="100">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 bg-yellow-400 rounded-lg text-yellow-900 shadow-xl">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">1. JavaScript Fetch API</h2>
+                </div>
+                <p class="text-white/90 mb-4 backdrop-blur-sm bg-white/10 p-4 rounded-lg">Modern way to consume APIs
+                    using <code class="text-yellow-300 font-semibold">fetch</code> with Async/Await in the browser.</p>
+
+                <div
+                    class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl border border-white/20 hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="bg-slate-800 px-4 py-3 text-xs text-slate-300 flex justify-between items-center border-b border-slate-700">
+                        <span class="flex items-center gap-2"><i class="fas fa-file-code"></i> client-app.js</span>
+                        <span
+                            class="bg-yellow-400 text-slate-900 px-2 py-1 rounded text-[10px] font-bold">JavaScript</span>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto"><code class="language-javascript">
+// 1. Define the API endpoint
+const API_URL = 'https://localhost:5001/api/products';
+
+// 2. Async function to generic GET request
+async function getProducts() {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) 
+            throw new Error(`Error: ${response.status}`);
+
+        const data = await response.json();
+        console.table(data); // Display data
+        renderUI(data);
+
+    } catch (error) {
+        console.error('Failed to fetch products:', error);
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <!-- ASP.NET Controller Side -->
+            <div class="space-y-6" data-aos="fade-left" data-aos-delay="200">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 bg-purple-400 rounded-lg text-purple-900 shadow-xl">
+                        <i class="fas fa-server text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">2. ASP.NET Core Controller</h2>
+                </div>
+                <p class="text-white/90 mb-4 backdrop-blur-sm bg-white/10 p-4 rounded-lg">The API Controller that
+                    handles the request and returns JSON.</p>
+
+                <div
+                    class="bg-slate-900 rounded-xl overflow-hidden shadow-2xl border border-white/20 hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="bg-slate-800 px-4 py-3 text-xs text-slate-300 flex justify-between items-center border-b border-slate-700">
+                        <span class="flex items-center gap-2"><i class="fas fa-file-code"></i>
+                            ProductsController.cs</span>
+                        <span class="bg-purple-400 text-slate-900 px-2 py-1 rounded text-[10px] font-bold">C#</span>
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto"><code class="language-csharp">
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService _service;
+
+    public ProductsController(IProductService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet]
+    public async Task&lt;ActionResult&lt;IEnumerable&lt;Product&gt;&gt;&gt; GetAll()
+    {
+        var products = await _service.GetProductsAsync();
+        return Ok(products); // Returns 200 OK with JSON
+    }
+
+    [HttpPost]
+    public IActionResult Create(ProductDto dto)
+    {
+        // ... implementation
+        return CreatedAtAction(nameof(GetById), new {id = 1}, dto);
+    }
+}
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Enabling CORS -->
+        <div class="mt-16" data-aos="fade-up" data-aos-delay="300">
+            <div class="glass-effect p-8 rounded-2xl border-l-4 border-yellow-400 shadow-2xl">
+                <div class="flex items-center gap-4 mb-6">
+                    <i class="fas fa-shield-halved text-4xl text-yellow-300"></i>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Crucial: Enabling CORS</h3>
+                        <p class="text-white/80">
+                            Browsers block requests from different origins (e.g., frontend on port 3000, API on port
+                            5000) by default.
+                            You must enable <strong class="text-yellow-300">Cross-Origin Resource Sharing
+                                (CORS)</strong> in <code class="text-yellow-300">Program.cs</code>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-lg overflow-hidden shadow-lg">
+                    <div
+                        class="bg-slate-800 px-4 py-2 text-xs text-slate-300 flex items-center gap-2 border-b border-slate-700">
+                        <i class="fas fa-file-code"></i> Program.cs
+                    </div>
+                    <pre class="m-0 p-4 overflow-x-auto"><code class="language-csharp">
+var builder = WebApplication.CreateBuilder(args);
+
+// 1. Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClientApp",
+        policy => policy.WithOrigins("http://localhost:3000") // Frontend URL
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+
+var app = builder.Build();
+
+// 2. Use CORS Middleware (Must be before MapControllers)
+app.UseCors("AllowClientApp");
+
+app.MapControllers();
+app.Run();
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-effect text-white text-sm py-12 mt-16 relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-4 mb-4">
+                <i class="fab fa-github text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+                <i class="fab fa-linkedin text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+                <i class="fas fa-envelope text-2xl hover:text-yellow-300 transition-all cursor-pointer"></i>
+            </div>
+            <p class="font-semibold text-lg mb-2">Chapter 07 - JavaScript Clients and ASP.NET Web API</p>
+            <p class="text-white/70">Group 7 Presentation | 2026</p>
+        </div>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.3, width: 1 },
+                move: { enable: true, speed: 1.5 }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+                modes: { repulse: { distance: 100 }, push: { particles_nb: 3 } }
+            }
+        });
+    </script>
+
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+
+</body>
+
+</html>

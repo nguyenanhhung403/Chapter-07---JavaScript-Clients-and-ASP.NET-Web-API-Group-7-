@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Diagrams - Chapter 07</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <link href="./output.css" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen">
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navbar -->
+    <nav class="glass-effect sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-code text-2xl text-white"></i>
+                <span class="font-bold text-xl tracking-tight text-white">Chapter 07</span>
+            </div>
+            <div class="flex gap-6 text-sm font-medium">
+                <a href="index.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-amber-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-home"></i> Overview
+                </a>
+                <a href="code-samples.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-amber-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-file-code"></i> Code Samples
+                </a>
+                <a href="advanced-diagrams.html"
+                    class="text-white border-b-2 border-white pb-1 hover:text-amber-300 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-diagram-project"></i> Advanced Diagrams
+                </a>
+                <a href="best-practices.html"
+                    class="text-white/80 hover:text-white hover:border-b-2 hover:border-amber-300 pb-1 transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-star"></i> Best Practices
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="py-16 text-center relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4">
+            <div class="inline-block mb-4" data-aos="zoom-in" data-aos-delay="100">
+                <i class="fas fa-sitemap text-6xl text-amber-300"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl" data-aos="fade-up"
+                data-aos-delay="200">
+                Advanced Concepts & Flows
+            </h1>
+            <p class="text-xl text-white/90 font-light backdrop-blur-sm bg-white/10 py-3 px-6 rounded-full inline-block"
+                data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-magnifying-glass-chart mr-2"></i>Deep dive into Authentication and CORS logic
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 max-w-6xl space-y-20 relative z-10">
+
+        <!-- 1. Authentication Flow Diagram -->
+        <section data-aos="fade-up">
+            <div class="flex items-center gap-4 mb-8">
+                <div
+                    class="w-16 h-16 bg-amber-400 rounded-full flex items-center justify-center text-amber-900 shadow-2xl">
+                    <i class="fas fa-lock text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold text-white">Authentication & JWT Flow</h2>
+                    <p class="text-white/80">How JavaScript securely communicates with ASP.NET Core.</p>
+                </div>
+            </div>
+
+            <!-- SVG Diagram for Auth -->
+            <div class="glass-effect rounded-2xl shadow-2xl p-8 border border-white/30 overflow-x-auto"
+                data-aos="zoom-in" data-aos-delay="200">
+                <div class="min-w-[800px] flex flex-col gap-8 relative">
+
+                    <!-- Top Row: Login -->
+                    <div class="flex justify-between items-center relative z-10">
+                        <div
+                            class="w-48 p-5 bg-blue-500 border-2 border-blue-300 rounded-lg text-center font-bold text-white shadow-lg hover:scale-105 transition-transform">
+                            <i class="fas fa-user-circle text-3xl mb-2"></i>
+                            <div>Client (JS App)</div>
+                        </div>
+                        <div class="flex-grow h-1 bg-white/30 mx-4 relative">
+                            <div
+                                class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-slate-900 px-3 py-1 text-xs font-bold rounded-full shadow-lg">
+                                1. POST /login (username, password)
+                            </div>
+                            <div
+                                class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg">
+                            </div>
+                        </div>
+                        <div
+                            class="w-48 p-5 bg-indigo-500 border-2 border-indigo-300 rounded-lg text-center font-bold text-white shadow-lg hover:scale-105 transition-transform">
+                            <i class="fas fa-shield-halved text-3xl mb-2"></i>
+                            <div>Authentication Controller</div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Row: Token Generation -->
+                    <div class="flex justify-center relative h-32">
+                        <div class="absolute right-[10%] top-0 h-full w-1 border-l-2 border-dashed border-white/40">
+                        </div>
+                        <div
+                            class="absolute right-[22%] top-1/2 transform -translate-y-1/2 bg-emerald-400/90 backdrop-blur-sm border border-emerald-200 p-4 rounded-lg shadow-xl w-64 text-sm text-slate-900 hover:scale-105 transition-transform">
+                            <div class="font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                                <i class="fas fa-key"></i> Create Token (JWT)
+                            </div>
+                            <div class="text-emerald-800 text-xs space-y-1">
+                                <div>• Validate credentials (DB)</div>
+                                <div>• Sign with Secret Key</div>
+                                <div>• Add Claims (Roles/Id)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row: Authorized Request -->
+                    <div class="flex justify-between items-center relative z-10">
+                        <div
+                            class="w-48 p-5 bg-blue-500 border-2 border-blue-300 rounded-lg text-center shadow-lg hover:scale-105 transition-transform">
+                            <div class="font-bold text-white mb-1">
+                                <i class="fas fa-lock-open mr-1"></i> Secure Call
+                            </div>
+                            <div class="text-xs text-blue-100 mt-1">Header: Bearer [TOKEN]</div>
+                        </div>
+                        <div class="flex-grow h-1 bg-white/30 mx-4 relative">
+                            <div
+                                class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-slate-900 px-3 py-1 text-xs font-bold rounded-full shadow-lg">
+                                3. GET /api/secure-data
+                            </div>
+                            <div
+                                class="absolute right-0 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg">
+                            </div>
+                        </div>
+                        <div
+                            class="w-48 p-5 bg-purple-500 border-2 border-purple-300 rounded-lg text-center shadow-lg relative hover:scale-105 transition-transform">
+                            <div class="font-bold text-white">
+                                <i class="fas fa-database mr-1"></i> Secure Controller
+                            </div>
+                            <div
+                                class="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-red-400 border border-red-200 text-red-900 px-3 py-2 rounded-lg text-xs w-max shadow-lg font-semibold">
+                                <i class="fas fa-check-circle mr-1"></i> [Authorize] Filter checks Token
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. CORS Policy Explained -->
+        <section data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center gap-4 mb-8">
+                <div
+                    class="w-16 h-16 bg-rose-400 rounded-full flex items-center justify-center text-rose-900 shadow-2xl">
+                    <i class="fas fa-triangle-exclamation text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold text-white">CORS Mechanism</h2>
+                    <p class="text-white/80">Cross-Origin Resource Sharing logic prevents security risks.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="glass-effect p-8 rounded-xl shadow-2xl border-t-4 border-rose-400 hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                    data-aos="flip-left" data-aos-delay="100">
+                    <div class="text-6xl font-bold text-white/20 mb-4">01</div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-paper-plane text-3xl text-rose-300"></i>
+                        <h3 class="text-2xl font-bold text-white">Preflight Request</h3>
+                    </div>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        Browser automatically sends an <code
+                            class="text-yellow-300 bg-slate-900/50 px-2 py-1 rounded">OPTIONS</code> request first to
+                        check if the server allows the connection.
+                    </p>
+                </div>
+                <!-- Step 2 -->
+                <div class="glass-effect p-8 rounded-xl shadow-2xl border-t-4 border-rose-500 hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                    data-aos="flip-left" data-aos-delay="200">
+                    <div class="text-6xl font-bold text-white/20 mb-4">02</div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-shield-check text-3xl text-rose-300"></i>
+                        <h3 class="text-2xl font-bold text-white">Policy Check</h3>
+                    </div>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        ASP.NET Core Middleware checks <code
+                            class="text-yellow-300 bg-slate-900/50 px-2 py-1 rounded">Program.cs</code> CORS policy
+                        (Origins, Methods, Headers).
+                    </p>
+                </div>
+                <!-- Step 3 -->
+                <div class="glass-effect p-8 rounded-xl shadow-2xl border-t-4 border-rose-600 hover:scale-105 hover:shadow-2xl transition-all duration-300"
+                    data-aos="flip-left" data-aos-delay="300">
+                    <div class="text-6xl font-bold text-white/20 mb-4">03</div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-circle-check text-3xl text-rose-300"></i>
+                        <h3 class="text-2xl font-bold text-white">Access Control</h3>
+                    </div>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        If allowed, server responds with <code
+                            class="text-yellow-300 bg-slate-900/50 px-2 py-1 rounded">Access-Control-Allow-Origin</code>.
+                        Browser then sends the actual data.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-effect text-white text-sm py-12 mt-16 relative z-10" data-aos="fade-up">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-4 mb-4">
+                <i class="fab fa-github text-2xl hover:text-amber-300 transition-all cursor-pointer"></i>
+                <i class="fab fa-linkedin text-2xl hover:text-amber-300 transition-all cursor-pointer"></i>
+                <i class="fas fa-envelope text-2xl hover:text-amber-300 transition-all cursor-pointer"></i>
+            </div>
+            <p class="font-semibold text-lg mb-2">Chapter 07 - JavaScript Clients and ASP.NET Web API</p>
+            <p class="text-white/70">Group 7 Presentation | 2026</p>
+        </div>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.4, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.3, width: 1 },
+                move: { enable: true, speed: 1.5 }
+            },
+            interactivity: {
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+                modes: { repulse: { distance: 100 }, push: { particles_nb: 3 } }
+            }
+        });
+    </script>
+
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+
+</body>
+
+</html>
